@@ -4,7 +4,6 @@
 #N.B. we don't need to worry about differentiating between people outside the lift and inside
 #Append that to a list/dictionary 
 
-from LiftMovement import direction_of_travel
 
 def main(file = "input1.txt") -> None:
     """ This function gives three pieces of data: the total number floors, the capacity of the lift and the requests of each floor."""
