@@ -1,11 +1,13 @@
-#Purpose of this module is to interact with the text file given on ELE
+from SCAN import scan_algorithm as s
+from LOOK import look_functionality as l
+# Purpose of this module is to interact with the text file given on ELE
 #Then we need 2 variables, number of floors and capacity
 #Then we need to read the text file, which has the number of people and the destinations they want to go to
 #N.B. we don't need to worry about differentiating between people outside the lift and inside
 #Append that to a list/dictionary 
 
 
-def main(file = "input1.txt") -> None:
+def fileread(file = "input1.txt") -> None:
     """ This function gives three pieces of data: the total number floors, the capacity of the lift and the requests of each floor."""
     with open(file,"r") as r: #Creates a pointer for the file
         files = r.readlines()
@@ -13,6 +15,18 @@ def main(file = "input1.txt") -> None:
         capacity = readcapacity(files)
         requests = readrequests(files)
     return floors,capacity, requests
+
+def main(algorithm = "LOOK"):
+    floor, capacity, requests = fileread()
+    if algorithm == "SCAN":
+        order = s(floor)
+    elif algorithm == "LOOK":
+        l(floor,capacity,requests)
+    elif algorithm == "MYLIFT":
+        print("MYLIFT")
+
+
+
     
 
 def readfloors(file) -> int:
@@ -65,4 +79,4 @@ def readrequests(file) -> list:
     
 
 if __name__ == '__main__':
-    print(main())
+    main()

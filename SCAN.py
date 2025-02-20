@@ -1,4 +1,4 @@
-def scan_algorithm(current_floor, requests, num_floors, direction=1):
+def scan_algorithm(requests, num_floors, direction=1, current_floor = 0):
     """
     Implements the SCAN (Elevator) Algorithm.
     
@@ -9,7 +9,7 @@ def scan_algorithm(current_floor, requests, num_floors, direction=1):
     
     :return: Returns a list of floors in the order they will be visited.
     """
-  if not requests:
+    if not requests:
         return [] #returns an empty list
     requests = sorted(requests)  #sorts requests for SCAN orders
     
