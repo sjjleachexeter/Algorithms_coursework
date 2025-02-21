@@ -17,14 +17,15 @@ def fileread(file = "input1.txt") -> None:
         requests = readrequests(files)
     return floors,capacity, requests
 
-def main(algorithm = "LOOK"):
+def main(algorithm = "MYLIFT"):
     floor, capacity, requests = fileread()
     if algorithm == "SCAN":
         time_values = order = s(floor)
     elif algorithm == "LOOK":
         time_values = l(floor,capacity,requests)
     elif algorithm == "MYLIFT":
-        time values = m(floor,capacity,requests)
+        time_values = m(floor,capacity,requests)
+    return time_values
         
 
 
@@ -80,4 +81,4 @@ def readrequests(file) -> list:
     
 
 if __name__ == '__main__':
-    main()
+    print(main())

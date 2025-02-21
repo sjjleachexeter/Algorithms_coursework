@@ -20,7 +20,7 @@ def look_functionality(floors, capacity, requests):
 
     #set a while loop that keeps on going until all requests in and out of the elevator have been cleared
     for values in requests:
-        for more_values inn values:
+        for more_values in values:
             for destinations in floors_to_go_to: #to fix
             
                 while all(values and destinations != None):
