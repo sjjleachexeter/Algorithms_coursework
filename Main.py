@@ -1,5 +1,6 @@
 from SCAN import scan_algorithm as s
 from LOOK import look_functionality as l
+from MYLIFT import my_lift_function as m
 # Purpose of this module is to interact with the text file given on ELE
 #Then we need 2 variables, number of floors and capacity
 #Then we need to read the text file, which has the number of people and the destinations they want to go to
@@ -19,12 +20,12 @@ def fileread(file = "input1.txt") -> None:
 def main(algorithm = "LOOK"):
     floor, capacity, requests = fileread()
     if algorithm == "SCAN":
-        order = s(floor)
+        time_values = order = s(floor)
     elif algorithm == "LOOK":
-        l(floor,capacity,requests)
+        time_values = l(floor,capacity,requests)
     elif algorithm == "MYLIFT":
-        print("MYLIFT")
-
+        time values = m(floor,capacity,requests)
+        
 
 
     
