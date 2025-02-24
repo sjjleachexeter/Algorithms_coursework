@@ -9,7 +9,17 @@ from MYLIFT import my_lift_function as m
 
 
 def fileread(file = "input3.txt") -> None:
-    """ This function gives three pieces of data: the total number floors, the capacity of the lift and the requests of each floor."""
+    """ 
+    This function reads a text file and calls three other functions to pull data from it.
+    
+    args:
+    file (txt file) -  a text file that is set to one of our example input files
+
+    returns:
+    floors (int) - the total number of floors
+    capacity (int) - the capacity of the lift
+    requests (list) - 2d list containing each request by each person per floor
+    """
     with open(file,"r") as r: #Creates a pointer for the file
         files = r.readlines()
         floors = readfloors(files)
@@ -18,9 +28,18 @@ def fileread(file = "input3.txt") -> None:
     return floors,capacity, requests
 
 def main(algorithm = "MYLIFT"):
+    """
+    chooses which algorithm is being used for the lift
+
+    args:
+    algorithm (str) - one of "SCAN","LOOK" or "MYLIFT" and the appropriate algorithm is used
+
+    returns:
+    time_values (list) - a 2d list where every index has two elements: the number of people remaining and the number of time units that have passed
+    """
     floor, capacity, requests = fileread()
     if algorithm == "SCAN":
-        time_values = order = s(floor)
+        time_values = s(floor,capacity,requests)
     elif algorithm == "LOOK":
         time_values = l(floor,capacity,requests)
     elif algorithm == "MYLIFT":

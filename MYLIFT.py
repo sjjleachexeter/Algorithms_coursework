@@ -1,7 +1,20 @@
 #this is the one where we are free to do whatever we want
 #let's brainstorm
 
-def my_lift_function(floors, capacity, requests, current_floor = 0, method = 0):
+def my_lift_function(floors, capacity, requests, current_floor = 0, method = 0) -> list:
+    """
+    Enacts a custom function that prioritises floors based off a relative value assigned after each movement
+    
+    args:
+    floors (int) - read from the text file to show the total number of floors
+    capacity (int) - read from the text file and shows the total capacity of the lift
+    requests (list) - read from the text file and is a 2d list that represents the requested floor given by each person on each floor
+    current_floor (int = 0) - set to be as 0, this is the starting floor
+    method (int = 0) - the version of my lift that we will be using (whether it be less or more realistic)
+
+    returns:
+    time_values (list) - a 2d list where every index has two elements: the number of people remaining and the number of time units that have passed
+    """
     if method == 0:
         time_intervals =[]
         tu = 0
@@ -53,6 +66,8 @@ def my_lift_function(floors, capacity, requests, current_floor = 0, method = 0):
                 done = True
 
     time_intervals.append([0,tu])
+    elif method = 1:
+        print("seb writes here!")
     return time_intervals
                 
 

@@ -78,8 +78,4 @@ def look_functionality(floors, capacity, requests):
 
 #time_intervals is an empty array I created at the top of LOOK, where I would like you to log the amount of time units (tu) that have passed
 #
-
-
-
         
-
