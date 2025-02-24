@@ -18,82 +18,63 @@ def look_functionality(floors, capacity, requests):
     # 4. Add people if possible
     # 5. Check either if we've reached the top or if there are requests above
 
-    #set a while loop that keeps on going until all requests in and out of the elevator have been cleared
-    for values in requests:
-        for more_values in values:
-            for destinations in floors_to_go_to: #to fix
+    #set a while loop that keeps on going until all requests in the elevator have been cleared
+    while any(values is not None for floor in requests for values in floor) or floors_to_go_to: #all loop didn't work
+
+        #iterate through the floors
+        for current_floor in range(len(requests)):
+            #check the list of floors passengers inside the elevator wish to go to
+            for destination in floors_to_go_to[:]: #problem with iterating over changing list causing skipped values, so using a shallow copy
+                #if one of them wants to go to the current floor, remove them
+                if current_floor == destination:
+                    floors_to_go_to.remove(destination)
+                    current_capacity -= 1
+
+            #now we check the requests on the floor we have arrived at
+            for request in requests[current_floor]:
+                #check that they are heading in the direction the elevator is and there is room for them
+                #append them to floors to go to and remove them from requests, then increase current_capacity
+                if request is not None and (request > current_floor and direction_of_travel == 1) or (request < current_floor and direction_of_travel == -1) and (current_capacity < capacity):
+                    floors_to_go_to.append(request)
+                    requests[current_floor].remove(request)
+                    current_capacity += 1
             
-                while all(values and destinations != None):
+            
+            #to decide how we want the lift to operate having finished with this floor, we need to know what direction if needs to go in
+            if direction_of_travel == 1:
+                #now we check if we're at the top
+                if current_floor == len(requests) - 1:
+                    direction_of_travel = -1
+                    break
+                #if there are no more requests in above or below floors:
+                if all(requests[i] is None for i in range(current_floor + 1, len(requests))) and not any(x>current_floor for x in floors_to_go_to):
+                    #change the direction
+                    direction_of_travel = -1
+                    break
 
-                    while direction_of_travel == 1:
-                        #iterate through the floors
-                        for current_floor in requests:
-                            #check the list of floors passengers inside the elevator wish to go to
-                            for destination in floors_to_go_to:
-                                #if one of them wants to go to the current floor, remove them
-                                if current_floor == destination:
-                                    floors_to_go_to.remove(destination)
 
-                            #now we check the requests on the floor we have arrived at
-                            for request in requests[current_floor]:
-                                #check that they are heading in the direction the elevator is and there is room for them
-                                #append them to floors to go to and remove them from requests, then increase current_capacity
-                                if request > current_floor and current_capacity < 5:
-                                    floors_to_go_to.append(request)
-                                    requests[current_floor].remove(request)
-                                    current_capacity += 1
-                        
-                        
-                            #if there are no more requests in above or below floors:
-                            if all(i is None for i in requests[current_floor][0:]) and all(x is None for x in floors_to_go_to if x < current_floor):
-                                #change the direction
-                                current_floor -= 1
-                                direction_of_travel = -1
-                                break
 
-                            #now we check if we're at the top
-                            if current_floor == len(requests):
-                                current_floor -= 1
-                                direction_of_travel = -1
-                                break
-                            
-                            #having checked we're not at the top floor, and there are more requests are above us, we can go to the next floor
-                            current_floor += 1
-
-                    while direction_of_travel == -1:
-                        for current_floor in requests:
-                            #check the list of floors passengers inside the elevator wish to go to
-                            for destination in floors_to_go_to:
-                                #if one of them wants to go to the current floor, remove them
-                                if current_floor == destination:
-                                    floors_to_go_to.remove(destination)
-
-                            #now we check the requests on the floor we have arrived at
-                            for request in requests[current_floor]:
-                                #check that they are heading in the direction the elevator is and there is room for them
-                                #append them to floors to go to and remove them from requests, then increase current_capacity
-                                if request < current_floor and current_capacity < 5:
-                                    floors_to_go_to.append(request)
-                                    requests[current_floor].remove(request)
-                                    current_capacity += 1
-
-                            #if there are no more requests in above or below floors:
-                            if all(i is None for i in requests[current_floor][:0]) and all(x is None for x in floors_to_go_to if x < current_floor):
-                                #change the direction
-                                direction_of_travel = 1
-                                break
-
-                            #now we check if we're at the bottom
-                            if current_floor == 0:
-                                direction_of_travel = 1
-                                break
-                            
-                            #having checked we're not at the top floor, and there are more requests are above us, we can go to the next floor
-                            current_floor -= 1
-                        
-
-                    
+            elif direction_of_travel == -1:
+                #if there are no more requests in above or below floors:
+                #now we check if we're at the bottom
+                if current_floor == 0:
+                    direction_of_travel = 1
+                    break
                 
+                if all(requests[i] is None for i in range(0, current_floor)) and not any(x<current_floor for x in floors_to_go_to):
+                    #change the direction
+                    direction_of_travel = 1
+                    break
+
+
+        if direction_of_travel == 1:
+            current_floor += 1
+        elif direction_of_travel == -1:
+            current_floor -=1
+            
+
+        
+    
 
 #time_intervals is an empty array I created at the top of LOOK, where I would like you to log the amount of time units (tu) that have passed
 #
