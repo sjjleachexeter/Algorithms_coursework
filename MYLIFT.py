@@ -10,7 +10,6 @@ def my_lift_function(floors, capacity, requests, current_floor = 0, method = 0):
         people_in_lift = 0
         destination = 0
         done = False
-
         for x in range(len(requests)):
             if requests[x] == [None]:
                 requests[x] = []
@@ -22,21 +21,17 @@ def my_lift_function(floors, capacity, requests, current_floor = 0, method = 0):
                     people_left += len(requests[x])
             people_left += sum(lift_requests)
             time_intervals.append([people_left,tu])
-            print(people_left,tu)
 
-
-            print(requests)
-            while people_in_lift < capacity and len(requests[destination]) != 0 and requests[destination] != [None]:
-                if lift_requests[destination] != 0:
-                    people_in_lift -= lift_requests[destination]
-                    lift_requests[destination] = 0
+            if lift_requests[destination] != 0:
+                people_in_lift -= lift_requests[destination]
+            lift_requests[destination] = 0
+            while people_in_lift < capacity and (len(requests[destination]) != 0 or lift_requests[destination] != 0):
                 if len(requests[destination]) != 0 and requests[destination] != [None]:
                     lift_requests[requests[destination].pop()-1]  += 1
                     people_in_lift += 1
             tu += 1
-            print(requests,lift_requests)
 
-            destination = current_floor
+            current_floor = destination
             for x in range(floors):
                 if x == current_floor or (sum(lift_requests) == capacity and lift_requests[x] == 0):
                     rel_values[x] = 0
@@ -45,7 +40,6 @@ def my_lift_function(floors, capacity, requests, current_floor = 0, method = 0):
 
 
             destination = rel_values.index(max(rel_values))
-            print(rel_values)
             tu += abs(destination-current_floor)
             
             clear = False
@@ -57,6 +51,8 @@ def my_lift_function(floors, capacity, requests, current_floor = 0, method = 0):
                     break
             if clear == True:
                 done = True
+
+    time_intervals.append([0,tu])
     return time_intervals
                 
 

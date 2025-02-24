@@ -8,7 +8,7 @@ from MYLIFT import my_lift_function as m
 #Append that to a list/dictionary 
 
 
-def fileread(file = "input1.txt") -> None:
+def fileread(file = "input3.txt") -> None:
     """ This function gives three pieces of data: the total number floors, the capacity of the lift and the requests of each floor."""
     with open(file,"r") as r: #Creates a pointer for the file
         files = r.readlines()
@@ -81,4 +81,5 @@ def readrequests(file) -> list:
     
 
 if __name__ == '__main__':
-    print(main())
+    with open("data.txt","a") as a:
+        a.write(str(main())+"\n")
