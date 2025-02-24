@@ -4,6 +4,10 @@ def look_functionality(floors, capacity, requests):
     floors_to_go_to = []
     current_floor = 0
     current_capacity = 0
+    #here we define how we measure the algorith, in number of people left to serve and time units (check bottom of doc for specification on time units)
+    def number_of_people_left_to_serve(): 
+        people = sum(len(floor) for floor in request + len(floors_to_go_to)) 
+        return people
     time_intervals = []
     tu = 0
     #for this variable, if it set to 1, it is upwards, if it -1, it is downward, 0 is stationary
@@ -29,7 +33,7 @@ def look_functionality(floors, capacity, requests):
                 if current_floor == destination:
                     floors_to_go_to.remove(destination)
                     current_capacity -= 1
-
+            
             #now we check the requests on the floor we have arrived at
             for request in requests[current_floor]:
                 #check that they are heading in the direction the elevator is and there is room for them
@@ -38,6 +42,10 @@ def look_functionality(floors, capacity, requests):
                     floors_to_go_to.append(request)
                     requests[current_floor].remove(request)
                     current_capacity += 1
+            
+            tu += 1
+            time_intervals.append(number_of_people_left_to_serve(), tu)
+
             
             
             #to decide how we want the lift to operate having finished with this floor, we need to know what direction if needs to go in
@@ -69,17 +77,16 @@ def look_functionality(floors, capacity, requests):
 
         if direction_of_travel == 1:
             current_floor += 1
+            tu += 1
+            time_intervals.append(number_of_people_left_to_serve(), tu)
         elif direction_of_travel == -1:
+            tu += 1
+            time_intervals.append(number_of_people_left_to_serve(), tu)
             current_floor -=1
+    
+    return time_intervals
             
 
-        
-    
 
-#time_intervals is an empty array I created at the top of LOOK, where I would like you to log the amount of time units (tu) that have passed
-#
-
-
-
-        
-
+#time_intervals is an empty list I created at the top of LOOK, where I would like you to log the amount of time units (tu) that have passed and number of people
+#time units: 1 time unit passes for interchange of people, 1 floor is 1 unit of time
