@@ -1,9 +1,14 @@
+from collections import deque
 
 #the function deals with... it's in the name
 def look_functionality(floors, capacity, requests):
-    floors_to_go_to = []
+    floors_to_go_to = deque()
     current_floor = 0
     current_capacity = 0
+    #here we define how we measure the algorith, in number of people left to serve and time units (check bottom of doc for specification on time units)
+    def number_of_people_left_to_serve(): 
+        people = sum(len(floor) for floor in requests + len(floors_to_go_to)) 
+        return people
     time_intervals = []
     tu = 0
     #for this variable, if it set to 1, it is upwards, if it -1, it is downward, 0 is stationary
@@ -23,12 +28,13 @@ def look_functionality(floors, capacity, requests):
 
         #iterate through the floors
         for current_floor in range(len(requests)):
-            #check the list of floors passengers inside the elevator wish to go to
-            for destination in floors_to_go_to[:]: #problem with iterating over changing list causing skipped values, so using a shallow copy
-                #if one of them wants to go to the current floor, remove them
-                if current_floor == destination:
-                    floors_to_go_to.remove(destination)
-                    current_capacity -= 1
+        
+            #first we want to remove all the people who want to get off at this floor
+            #here we use the filter method to get rid of all values equal to the current floor and setting floors to go to equal to that queue
+            floors_to_go_to = deque(filter(lambda x: x != current_floor, floors_to_go_to))
+            #now we want to adjust the capacity of the lift
+            current_capacity = len(floors_to_go_to)
+
 
             #now we check the requests on the floor we have arrived at
             for request in requests[current_floor]:
@@ -38,6 +44,10 @@ def look_functionality(floors, capacity, requests):
                     floors_to_go_to.append(request)
                     requests[current_floor].remove(request)
                     current_capacity += 1
+            
+            tu += 1
+            time_intervals.append((number_of_people_left_to_serve(), tu))
+
             
             
             #to decide how we want the lift to operate having finished with this floor, we need to know what direction if needs to go in
@@ -69,13 +79,16 @@ def look_functionality(floors, capacity, requests):
 
         if direction_of_travel == 1:
             current_floor += 1
+            tu += 1
+            time_intervals.append((number_of_people_left_to_serve(), tu))
         elif direction_of_travel == -1:
+            tu += 1
+            time_intervals.append((number_of_people_left_to_serve(), tu))
             current_floor -=1
+    
+    return time_intervals
             
 
-        
-    
 
-#time_intervals is an empty array I created at the top of LOOK, where I would like you to log the amount of time units (tu) that have passed
-#
-        
+#time_intervals is an empty list I created at the top of LOOK, where I would like you to log the amount of time units (tu) that have passed and number of people
+#time units: 1 time unit passes for interchange of people, 1 floor is 1 unit of time
