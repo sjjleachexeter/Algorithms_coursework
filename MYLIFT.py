@@ -30,8 +30,9 @@ def my_lift_function(floors, capacity, requests, current_floor = 0) -> list:
             if requests[x] != [None]:
                 people_left += len(requests[x])
         people_left += sum(lift_requests)
-        time_intervals.append(people_left)
+    
 
+        time_intervals.append(people_left)
         if lift_requests[destination] != 0:
             people_in_lift -= lift_requests[destination]
         lift_requests[destination] = 0
@@ -49,6 +50,7 @@ def my_lift_function(floors, capacity, requests, current_floor = 0) -> list:
 
 
         destination = rel_values.index(max(rel_values))
+        time_intervals.append(people_left)
             
         clear = False
         for x in range(len(requests)):

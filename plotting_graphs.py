@@ -10,7 +10,7 @@ with open("data.txt","r") as r:
         for t in range(len(data)):
             x_values.append(int(data[t][1]))
             y_values.append(int(data[t][0]))
-        plt.plot(x_values, y_values, label = "MYLIFT"+str(t))
+        
+    plt.plot(x_values, y_values)
 
-    plt.legend()
-    plt.show()
+    plt.show(block = True)

@@ -1,4 +1,4 @@
-from SCAN import scan_algorithm as s
+from SCANS import scanning_algorithm as s
 from LOOK import look_functionality as l
 from MYLIFT import my_lift_function as m
 # Purpose of this module is to interact with the text file given on ELE
@@ -27,7 +27,7 @@ def fileread(file = "input3.txt") -> None:
         requests = readrequests(files)
     return floors,capacity, requests
 
-def main(algorithm = "LOOK"):
+def main(algorithm = "SCAN"):
     """
     chooses which algorithm is being used for the lift
 
@@ -102,4 +102,3 @@ def readrequests(file) -> list:
 if __name__ == '__main__':
     with open("data.txt","a") as a:
         a.write(str(main())+"\n")
-    print(main())
