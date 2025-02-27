@@ -27,7 +27,7 @@ def fileread(file = "input3.txt") -> None:
         requests = readrequests(files)
     return floors,capacity, requests
 
-def main(algorithm = "MYLIFT"):
+def main(algorithm = "LOOK"):
     """
     chooses which algorithm is being used for the lift
 
