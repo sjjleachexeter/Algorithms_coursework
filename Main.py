@@ -1,12 +1,6 @@
 from SCANS import scanning_algorithm as s
 from LOOK import look_functionality as l
 from MYLIFT import my_lift_function as m
-# Purpose of this module is to interact with the text file given on ELE
-#Then we need 2 variables, number of floors and capacity
-#Then we need to read the text file, which has the number of people and the destinations they want to go to
-#N.B. we don't need to worry about differentiating between people outside the lift and inside
-#Append that to a list/dictionary 
-
 
 def fileread(file = "input3.txt") -> None:
     """ 
@@ -101,4 +95,4 @@ def readrequests(file) -> list:
 
 if __name__ == '__main__':
     with open("data.txt","a") as a:
-        a.write(str(main())+"\n")
+        a.write(str(main())+"\n") #Appending to our data to be used by plotting graphs
