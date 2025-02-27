@@ -17,7 +17,11 @@ def look_functionality(floor, capacity, requests):
     #for this variable, if it set to 1, it is upwards, if it -1, it is downward, 0 is stationary
     #we start with direction of travel set to 1 on the assumption that the lift starts on the ground floor
     direction_of_travel = 1
-    
+
+    for x in range(len(requests)): 
+        # Data sanitisation
+        if requests[x] == [None]:
+            requests[x] = []
     
     #iterate through the floors, at each one:
     # 1. drop off passangers

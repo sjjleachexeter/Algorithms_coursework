@@ -91,8 +91,6 @@ def readrequests(file) -> list:
                 requests[x][y] = None
     return requests
 
-    
-
 if __name__ == '__main__':
     with open("data.txt","a") as a:
         a.write(str(main())+"\n") #Appending to our data to be used by plotting graphs
