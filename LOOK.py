@@ -23,13 +23,24 @@ def look_functionality(floor, capacity, requests):
     # 3. check the direction people want to go in
     # 4. Add people if possible
     # 5. Check either if we've reached the top or if there are requests above
+    time_intervals.append(number_of_people_left_to_serve())
+
+    # Here we're going to clean up the input
+    for i in range(len(requests)):
+        if requests[i] is None:
+            requests[i] = []
+
 
     #set a while loop that keeps on going until all requests in the elevator have been cleared
     while any(request not in ([], [None]) for request in requests) or floors_to_go_to: #all loop didn't work
+
+        if len(time_intervals) > 2000:
+            print("Safety break: possible infinite loop detected")
+            break
     
         #first we want to remove all the people who want to get off at this floor
         #here we use the filter method to get rid of all values equal to the current floor and setting floors to go to equal to that queue
-        floors_to_go_to = deque(filter(lambda x: x != current_floor + 1, floors_to_go_to))
+        floors_to_go_to = deque(level for level in floors_to_go_to if level != current_floor + 1)
         #now we want to adjust the capacity of the lift
         current_capacity = len(floors_to_go_to)
 
@@ -39,24 +50,23 @@ def look_functionality(floor, capacity, requests):
             for request in requests[current_floor][:]: #iterating over a shallow copy of requests solves skipping issues that I struggled with
                 #check that they are heading in the direction the elevator is and there is room for them
                 #append them to floors to go to and remove them from requests, then increase current_capacity
-                if (isinstance(request, int)) and ((request > current_floor and direction_of_travel == 1) or (request < current_floor and direction_of_travel == -1)) and (current_capacity < capacity):
+                if (isinstance(request, int)) and (current_capacity < capacity):
                     floors_to_go_to.append(request)
                     requests[current_floor].remove(request)
                     current_capacity += 1
         
         #now we log the time intervel as 1 for the change over of people
-        tu += 1
-        time_intervals.append((number_of_people_left_to_serve(), tu))
+        time_intervals.append(number_of_people_left_to_serve())
 
         
         
         #to decide how we want the lift to operate having finished with this floor, we need to know what direction if needs to go in
         if direction_of_travel == 1:
             #now we check if we're at the top
-            if current_floor == len(requests) - 1:
+            if current_floor == floor - 1:
                 direction_of_travel = -1
             #if there are no more requests in above or below floors:
-            elif all(values in ([], [None], None) for values in requests[current_floor + 1:]) and not any(x>current_floor + 1 for x in floors_to_go_to):
+            elif (all(not values or values == [None] for values in requests[current_floor + 1:])) and not any(x>current_floor + 1 for x in floors_to_go_to):
                 #change the direction
                 direction_of_travel = -1
 
@@ -68,18 +78,17 @@ def look_functionality(floor, capacity, requests):
             if current_floor == 0:
                 direction_of_travel = 1
             #here I checked if there were no more requests below
-            elif all(requests[i] in ([], [None], None) for i in range(0, current_floor)) and not any(x<current_floor + 1 for x in floors_to_go_to):
+            elif (all(not values or values == [None] for values in requests[:current_floor])) and not any(x<current_floor + 1 for x in floors_to_go_to):
                 #change the direction
                 direction_of_travel = 1
 
         if direction_of_travel == 1:
             current_floor += 1
-            tu += 1
-            time_intervals.append((number_of_people_left_to_serve(), tu))
         elif direction_of_travel == -1:
             current_floor -=1
-            tu += 1
-            time_intervals.append((number_of_people_left_to_serve(), tu))
+
+        time_intervals.append(number_of_people_left_to_serve())
+
 
     return time_intervals
         

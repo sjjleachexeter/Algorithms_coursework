@@ -102,3 +102,4 @@ def readrequests(file) -> list:
 if __name__ == '__main__':
     with open("data.txt","a") as a:
         a.write(str(main())+"\n")
+    print(main())

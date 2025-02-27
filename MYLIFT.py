@@ -15,7 +15,6 @@ def my_lift_function(floors, capacity, requests, current_floor = 0) -> list:
     time_values (list) - a 2d list where every index has two elements: the number of people remaining and the number of time units that have passed
     """
     time_intervals =[]
-    tu = 0
     rel_values = [0 for x in range(floors)]
     lift_requests = [0 for x in range(floors)]
     people_in_lift = 0
@@ -31,7 +30,7 @@ def my_lift_function(floors, capacity, requests, current_floor = 0) -> list:
             if requests[x] != [None]:
                 people_left += len(requests[x])
         people_left += sum(lift_requests)
-        time_intervals.append([people_left,tu])
+        time_intervals.append(people_left)
 
         if lift_requests[destination] != 0:
             people_in_lift -= lift_requests[destination]
@@ -40,7 +39,6 @@ def my_lift_function(floors, capacity, requests, current_floor = 0) -> list:
             if len(requests[destination]) != 0 and requests[destination] != [None]:
                 lift_requests[requests[destination].pop()-1]  += 1
                 people_in_lift += 1
-        tu += 1
 
         current_floor = destination
         for x in range(floors):
@@ -51,7 +49,6 @@ def my_lift_function(floors, capacity, requests, current_floor = 0) -> list:
 
 
         destination = rel_values.index(max(rel_values))
-        tu += abs(destination-current_floor)
             
         clear = False
         for x in range(len(requests)):
@@ -63,7 +60,7 @@ def my_lift_function(floors, capacity, requests, current_floor = 0) -> list:
         if clear == True:
             done = True
 
-    time_intervals.append([0,tu])
+    time_intervals.append(0)
     return time_intervals
                 
 
