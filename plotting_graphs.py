@@ -17,7 +17,7 @@ with open("data.txt","r") as r:
         for t in range(len(data)):
             y_values.append(int(data[t]))
             x_values.append(t)
-        plt.plot(x_values, y_values,label = str(file[i*4])[:-1]+" 1", color = colors[i]) #Reads the top of the file for each name of the algorithm
+        plt.plot(x_values, y_values,label = str(file[i*4])[:-1]+" 1", color = colors[i], alpha = 0.5) #Reads the top of the file for each name of the algorithm
 
     plt.legend() #formatting of the first graph
     plt.title("Input1.txt results")
@@ -36,7 +36,7 @@ with open("data.txt","r") as r:
         for t in range(len(data)):
             y_values.append(int(data[t]))
             x_values.append(t)
-        plt.plot(x_values, y_values,label = str(file[j*4])[:-1]+" 2", color = colors[j])
+        plt.plot(x_values, y_values,label = str(file[j*4])[:-1]+" 2", color = colors[j], alpha = 0.5)
 
     plt.legend()
     plt.title("Input2.txt results")
@@ -53,7 +53,7 @@ with open("data.txt","r") as r:
         for t in range(len(data)):
             y_values.append(int(data[t]))
             x_values.append(t)
-        plt.plot(x_values, y_values,label = str(file[k*4])[:-1]+" 3", color = colors[k])
+        plt.plot(x_values, y_values,label = str(file[k*4])[:-1]+" 3", color = colors[k], alpha = 0.5)
 
     plt.legend()
     plt.title("Input3.txt results")
