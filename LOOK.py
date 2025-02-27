@@ -1,13 +1,14 @@
 from collections import deque
 
 #the function deals with... it's in the name
-def look_functionality(floors, capacity, requests):
+def look_functionality(floor, capacity, requests):
+    #create a queue that we will use to address requests of people in the lift
     floors_to_go_to = deque()
     current_floor = 0
     current_capacity = 0
     #here we define how we measure the algorith, in number of people left to serve and time units (check bottom of doc for specification on time units)
     def number_of_people_left_to_serve(): 
-        people = sum(len(floor) for floor in requests + len(floors_to_go_to)) 
+        people = sum(len([r for r in values if r is not None]) for values in requests) + len(floors_to_go_to) 
         return people
     time_intervals = []
     tu = 0
@@ -24,70 +25,64 @@ def look_functionality(floors, capacity, requests):
     # 5. Check either if we've reached the top or if there are requests above
 
     #set a while loop that keeps on going until all requests in the elevator have been cleared
-    while any(values is not None for floor in requests for values in floor) or floors_to_go_to: #all loop didn't work
-
-        #iterate through the floors
-        for current_floor in range(len(requests)):
-        
-            #first we want to remove all the people who want to get off at this floor
-            #here we use the filter method to get rid of all values equal to the current floor and setting floors to go to equal to that queue
-            floors_to_go_to = deque(filter(lambda x: x != current_floor, floors_to_go_to))
-            #now we want to adjust the capacity of the lift
-            current_capacity = len(floors_to_go_to)
+    while any(request not in ([], [None]) for request in requests) or floors_to_go_to: #all loop didn't work
+    
+        #first we want to remove all the people who want to get off at this floor
+        #here we use the filter method to get rid of all values equal to the current floor and setting floors to go to equal to that queue
+        floors_to_go_to = deque(filter(lambda x: x != current_floor + 1, floors_to_go_to))
+        #now we want to adjust the capacity of the lift
+        current_capacity = len(floors_to_go_to)
 
 
-            #now we check the requests on the floor we have arrived at
-            for request in requests[current_floor]:
+        #now we check the requests on the floor we have arrived at
+        if 0 <= current_floor < len(requests) and requests[current_floor]:
+            for request in requests[current_floor][:]: #iterating over a shallow copy of requests solves skipping issues that I struggled with
                 #check that they are heading in the direction the elevator is and there is room for them
                 #append them to floors to go to and remove them from requests, then increase current_capacity
-                if request is not None and (request > current_floor and direction_of_travel == 1) or (request < current_floor and direction_of_travel == -1) and (current_capacity < capacity):
+                if (isinstance(request, int)) and ((request > current_floor and direction_of_travel == 1) or (request < current_floor and direction_of_travel == -1)) and (current_capacity < capacity):
                     floors_to_go_to.append(request)
                     requests[current_floor].remove(request)
                     current_capacity += 1
-            
-            tu += 1
-            time_intervals.append((number_of_people_left_to_serve(), tu))
+        
+        #now we log the time intervel as 1 for the change over of people
+        tu += 1
+        time_intervals.append((number_of_people_left_to_serve(), tu))
 
-            
-            
-            #to decide how we want the lift to operate having finished with this floor, we need to know what direction if needs to go in
-            if direction_of_travel == 1:
-                #now we check if we're at the top
-                if current_floor == len(requests) - 1:
-                    direction_of_travel = -1
-                    break
-                #if there are no more requests in above or below floors:
-                if all(requests[i] is None for i in range(current_floor + 1, len(requests))) and not any(x>current_floor for x in floors_to_go_to):
-                    #change the direction
-                    direction_of_travel = -1
-                    break
-
+        
+        
+        #to decide how we want the lift to operate having finished with this floor, we need to know what direction if needs to go in
+        if direction_of_travel == 1:
+            #now we check if we're at the top
+            if current_floor == len(requests) - 1:
+                direction_of_travel = -1
+            #if there are no more requests in above or below floors:
+            elif all(values in ([], [None], None) for values in requests[current_floor + 1:]) and not any(x>current_floor + 1 for x in floors_to_go_to):
+                #change the direction
+                direction_of_travel = -1
 
 
-            elif direction_of_travel == -1:
-                #if there are no more requests in above or below floors:
-                #now we check if we're at the bottom
-                if current_floor == 0:
-                    direction_of_travel = 1
-                    break
-                
-                if all(requests[i] is None for i in range(0, current_floor)) and not any(x<current_floor for x in floors_to_go_to):
-                    #change the direction
-                    direction_of_travel = 1
-                    break
 
+        elif direction_of_travel == -1:
+            #if there are no more requests in above or below floors:
+            #now we check if we're at the bottom
+            if current_floor == 0:
+                direction_of_travel = 1
+            #here I checked if there were no more requests below
+            elif all(requests[i] in ([], [None], None) for i in range(0, current_floor)) and not any(x<current_floor + 1 for x in floors_to_go_to):
+                #change the direction
+                direction_of_travel = 1
 
         if direction_of_travel == 1:
             current_floor += 1
             tu += 1
             time_intervals.append((number_of_people_left_to_serve(), tu))
         elif direction_of_travel == -1:
+            current_floor -=1
             tu += 1
             time_intervals.append((number_of_people_left_to_serve(), tu))
-            current_floor -=1
-    
+
     return time_intervals
-            
+        
 
 
 #time_intervals is an empty list I created at the top of LOOK, where I would like you to log the amount of time units (tu) that have passed and number of people
