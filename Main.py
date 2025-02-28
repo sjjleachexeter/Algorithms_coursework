@@ -1,4 +1,4 @@
-from SCANS import scanning_algorithm as s
+from SCAN import scanning_algorithm as s
 from LOOK import look_functionality as l
 from MYLIFT import my_lift_function as m
 
